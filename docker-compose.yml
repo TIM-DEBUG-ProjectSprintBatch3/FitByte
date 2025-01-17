@@ -1,0 +1,85 @@
+services:
+  go-appl:
+    container_name: go-be-skeleton
+    image: timdebug/p1:runtime
+    build:
+      context: .
+      args:
+        - APP_PORT=${PORT}
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT}
+      - MODE=${MODE}
+      - PROD_HOST=${PROD_HOST}
+      - DEBUG_HOST=${DEBUG_HOST}
+      - PORT=${PORT}
+      - HTTP_PROXY=${HTTP_PROXY}
+      - HTTPS_PROXY=${HTTPS_PROXY}
+      - NO_PROXY=${NO_PROXY}
+    networks:
+      - sprint_network
+    restart: always
+    env_file:
+      - .env
+
+  go-appl-dev:
+    container_name: go-be-skeleton
+    image: timdebug/p1:runtime
+    build:
+      context: .
+      args:
+        - APP_PORT=${PORT}
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT}
+      - MODE=${MODE}
+      - PROD_HOST=${PROD_HOST}
+      - DEBUG_HOST=${DEBUG_HOST}
+      - PORT=${PORT}
+      - HTTP_PROXY=${HTTP_PROXY}
+      - HTTPS_PROXY=${HTTPS_PROXY}
+      - NO_PROXY=${NO_PROXY}
+    networks:
+      - sprint_network
+    volumes:
+      - .:/app
+    restart: always
+    env_file:
+      - .env
+    profiles:
+      - local
+      - dev
+
+  postgres:
+    image: postgres:17.2
+    container_name: postgres
+    command: postgres -c log_destination=stderr -c log_statement=all -c log_connections=on -c log_disconnections=on
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - sprint_network
+    profiles:
+      - local
+
+volumes:
+  db_data:
+
+networks:
+  sprint_network:
+    driver: bridge
