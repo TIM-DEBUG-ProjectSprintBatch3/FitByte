@@ -5,8 +5,6 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/levensspel/go-gin-template/di"
 	authHandler "github.com/levensspel/go-gin-template/handler/auth"
-	departmentHandler "github.com/levensspel/go-gin-template/handler/department"
-	employeeHandler "github.com/levensspel/go-gin-template/handler/employee"
 	fileHandler "github.com/levensspel/go-gin-template/handler/file"
 	userHandler "github.com/levensspel/go-gin-template/handler/user"
 	"github.com/levensspel/go-gin-template/middleware"
@@ -21,8 +19,6 @@ func NewRouter(r *gin.Engine, db *pgxpool.Pool) {
 	userHandler := do.MustInvoke[userHandler.UserHandler](di.Injector)
 	authHandler := do.MustInvoke[authHandler.AuthorizationHandler](di.Injector)
 	fileHandler := do.MustInvoke[fileHandler.FileHandler](di.Injector)
-	deptHandler := do.MustInvoke[departmentHandler.DepartmentHandler](di.Injector)
-	employeeHdlr := do.MustInvoke[employeeHandler.EmployeeHandler](di.Injector)
 
 	swaggerRoute := r.Group("/")
 	{
@@ -48,21 +44,7 @@ func NewRouter(r *gin.Engine, db *pgxpool.Pool) {
 			user.PATCH("", middleware.Authorization, middleware.ContentType, userHandler.UpdateProfile)
 			user.DELETE("", middleware.Authorization, userHandler.Delete)
 		}
-		department := controllers.Group("/department")
-		{
-			department.POST("", middleware.ContentType, middleware.Authorization, deptHandler.Create)
-			department.GET("", middleware.Authorization, deptHandler.GetAll)
-			department.PATCH("/:id", middleware.ContentType, middleware.Authorization, deptHandler.Update)
-			department.DELETE("/:id", middleware.Authorization, deptHandler.Delete)
-		}
 
-		employee := controllers.Group("/employee")
-		{
-			employee.POST("", middleware.Authorization, middleware.ContentType, employeeHdlr.Create)
-			employee.GET("", middleware.Authorization, employeeHdlr.GetAll)
-			employee.PATCH(":identityNumber", middleware.Authorization, middleware.ContentType, employeeHdlr.Update)
-			employee.DELETE(":identityNumber", middleware.Authorization, employeeHdlr.Delete)
-		}
 		// tambah route lainnya disini
 	}
 
