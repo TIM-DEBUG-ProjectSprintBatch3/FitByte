@@ -1,0 +1,97 @@
+services:
+  # fitbyte-readonly-service:
+  #   container_name: readonly-service
+  #   image: timdebug/fitbyte/readonly:runtime
+  #   build:
+  #     context: ./ReadonlyServices
+  #     args:
+  #       - APP_PORT=8081
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     - DB_HOST=${DB_HOST}
+  #     - DB_USER=${DB_USER}
+  #     - DB_PASSWORD=${DB_PASSWORD}
+  #     - DB_NAME=${DB_NAME}
+  #     - DB_PORT=${DB_PORT}
+  #     - MODE=${MODE}
+  #     - PROD_HOST=${PROD_HOST}
+  #     - DEBUG_HOST=${DEBUG_HOST}
+  #     - PORT=8081
+  #     - HTTP_PROXY=${HTTP_PROXY}
+  #     - HTTPS_PROXY=${HTTPS_PROXY}
+  #     - NO_PROXY=${NO_PROXY}
+  #   networks:
+  #     - sprint_network
+  #   restart: always
+  #   env_file:
+  #     - .env
+
+  # fitbyte-manipulationdata-service:
+  #   container_name: manipulationdata-service
+  #   image: timdebug/fitbyte/manipulationdata:runtime
+  #   build:
+  #     context: ./DataManipulationServices
+  #     args:
+  #       - APP_PORT=8082
+  #   ports:
+  #     - "8082:8082"
+  #   environment:
+  #     - DB_HOST=${DB_HOST}
+  #     - DB_USER=${DB_USER}
+  #     - DB_PASSWORD=${DB_PASSWORD}
+  #     - DB_NAME=${DB_NAME}
+  #     - DB_PORT=${DB_PORT}
+  #     - MODE=${MODE}
+  #     - PROD_HOST=${PROD_HOST}
+  #     - DEBUG_HOST=${DEBUG_HOST}
+  #     - PORT=8082
+  #     - HTTP_PROXY=${HTTP_PROXY}
+  #     - HTTPS_PROXY=${HTTPS_PROXY}
+  #     - NO_PROXY=${NO_PROXY}
+  #   networks:
+  #     - sprint_network
+  #   restart: always
+  #   env_file:
+  #     - .env
+  
+  # fitbyte-file-service:
+  #   container_name: file-service
+  #   image: timdebug/fitbyte/file:runtime
+  #   build:
+  #     context: ./FileServices
+  #     args:
+  #       - APP_PORT=8083
+  #   ports:
+  #     - "8083:8083"
+  #   environment:
+  #     - DB_HOST=${DB_HOST}
+  #     - DB_USER=${DB_USER}
+  #     - DB_PASSWORD=${DB_PASSWORD}
+  #     - DB_NAME=${DB_NAME}
+  #     - DB_PORT=${DB_PORT}
+  #     - MODE=${MODE}
+  #     - PROD_HOST=${PROD_HOST}
+  #     - DEBUG_HOST=${DEBUG_HOST}
+  #     - PORT=8083
+  #     - HTTP_PROXY=${HTTP_PROXY}
+  #     - HTTPS_PROXY=${HTTPS_PROXY}
+  #     - NO_PROXY=${NO_PROXY}
+  #   networks:
+  #     - sprint_network
+  #   restart: always
+  #   env_file:
+  #     - .env
+
+  nginx-apigateway:
+    build:
+      context: ./APIGateway
+    networks:
+      - sprint_network
+    restart: always
+    ports:
+      - "8080:80" # Exposes port 80 on the host and forwards it to port 80 in the container.
+
+networks:
+  sprint_network:
+    driver: bridge
