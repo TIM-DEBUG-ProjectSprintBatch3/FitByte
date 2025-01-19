@@ -5,15 +5,15 @@ import (
 	"strings"
 	"time"
 
+	authJwt "github.com/TimDebug/FitByte/src/auth/jwt"
+	"github.com/TimDebug/FitByte/src/exceptions"
+	functionCallerInfo "github.com/TimDebug/FitByte/src/logger/helper"
+	loggerZap "github.com/TimDebug/FitByte/src/logger/zap"
+	"github.com/TimDebug/FitByte/src/model/dtos/request"
+	"github.com/TimDebug/FitByte/src/model/dtos/response"
+	Entity "github.com/TimDebug/FitByte/src/model/entities/user"
+	userRepository "github.com/TimDebug/FitByte/src/repositories/user"
 	"github.com/jackc/pgx/v5/pgxpool"
-	authJwt "github.com/rafitanujaya/go-fiber-template/src/auth/jwt"
-	"github.com/rafitanujaya/go-fiber-template/src/exceptions"
-	functionCallerInfo "github.com/rafitanujaya/go-fiber-template/src/logger/helper"
-	loggerZap "github.com/rafitanujaya/go-fiber-template/src/logger/zap"
-	"github.com/rafitanujaya/go-fiber-template/src/model/dtos/request"
-	"github.com/rafitanujaya/go-fiber-template/src/model/dtos/response"
-	Entity "github.com/rafitanujaya/go-fiber-template/src/model/entities/user"
-	userRepository "github.com/rafitanujaya/go-fiber-template/src/repositories/user"
 	"github.com/samber/do/v2"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -87,6 +87,7 @@ func (us *userService) Update(ctx context.Context, id string, req request.Update
 		return nil, err
 	}
 
+	profile.Id = id
 	profile.Preference = &req.Preference
 	profile.WeightUnit = &req.WeightUnit
 	profile.HeightUnit = &req.HeightUnit
@@ -99,7 +100,7 @@ func (us *userService) Update(ctx context.Context, id string, req request.Update
 		profile.ImageUri = req.ImageUri
 	}
 
-	_, err = us.UserRepository.Update(context.Background(), id, *profile)
+	_, err = us.UserRepository.Update(context.Background(), *profile)
 	if err != nil {
 		us.Logger.Error(err.Error(), functionCallerInfo.UserServiceUpdate, err)
 		return nil, err
