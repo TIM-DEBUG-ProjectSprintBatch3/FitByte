@@ -3,8 +3,8 @@ package activityRepository
 import (
 	"context"
 
+	Entity "github.com/TimDebug/FitByte/src/model/entities/activity"
 	"github.com/jackc/pgx/v5/pgxpool"
-	Entity "github.com/rafitanujaya/go-fiber-template/src/model/entities/activity"
 )
 
 type ActivityRepositoryInterface interface {

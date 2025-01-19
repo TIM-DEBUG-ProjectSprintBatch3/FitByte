@@ -1,16 +1,16 @@
 package di
 
 import (
+	authJwt "github.com/TimDebug/FitByte/src/auth/jwt"
+	"github.com/TimDebug/FitByte/src/database/postgre"
+	activityController "github.com/TimDebug/FitByte/src/http/controllers/activity"
+	userController "github.com/TimDebug/FitByte/src/http/controllers/user"
+	loggerZap "github.com/TimDebug/FitByte/src/logger/zap"
+	activityRepository "github.com/TimDebug/FitByte/src/repositories/activity"
+	userRepository "github.com/TimDebug/FitByte/src/repositories/user"
+	activityService "github.com/TimDebug/FitByte/src/services/activity"
+	userService "github.com/TimDebug/FitByte/src/services/user"
 	"github.com/jackc/pgx/v5/pgxpool"
-	authJwt "github.com/rafitanujaya/go-fiber-template/src/auth/jwt"
-	"github.com/rafitanujaya/go-fiber-template/src/database/postgre"
-	activityController "github.com/rafitanujaya/go-fiber-template/src/http/controllers/activity"
-	userController "github.com/rafitanujaya/go-fiber-template/src/http/controllers/user"
-	loggerZap "github.com/rafitanujaya/go-fiber-template/src/logger/zap"
-	activityRepository "github.com/rafitanujaya/go-fiber-template/src/repositories/activity"
-	userRepository "github.com/rafitanujaya/go-fiber-template/src/repositories/user"
-	activityService "github.com/rafitanujaya/go-fiber-template/src/services/activity"
-	userService "github.com/rafitanujaya/go-fiber-template/src/services/user"
 	"github.com/samber/do/v2"
 )
 

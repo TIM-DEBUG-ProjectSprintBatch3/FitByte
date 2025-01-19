@@ -1,8 +1,8 @@
 package middlewares
 
 import (
+	response "github.com/TimDebug/FitByte/src/model/web"
 	"github.com/gofiber/fiber/v2"
-	response "github.com/rafitanujaya/go-fiber-template/src/model/web"
 )
 
 func ContentTypeJsonApplicationMiddleware(c *fiber.Ctx) error {

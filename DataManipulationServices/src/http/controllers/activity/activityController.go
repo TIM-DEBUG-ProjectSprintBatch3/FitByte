@@ -4,11 +4,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/TimDebug/FitByte/src/exceptions"
+	"github.com/TimDebug/FitByte/src/model/dtos/request"
+	Entity "github.com/TimDebug/FitByte/src/model/entities/activity"
+	activityService "github.com/TimDebug/FitByte/src/services/activity"
 	"github.com/gofiber/fiber/v2"
-	"github.com/rafitanujaya/go-fiber-template/src/exceptions"
-	"github.com/rafitanujaya/go-fiber-template/src/model/dtos/request"
-	Entity "github.com/rafitanujaya/go-fiber-template/src/model/entities/activity"
-	activityService "github.com/rafitanujaya/go-fiber-template/src/services/activity"
 	"github.com/samber/do/v2"
 )
 

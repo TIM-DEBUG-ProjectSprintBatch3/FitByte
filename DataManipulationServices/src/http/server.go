@@ -3,14 +3,14 @@ package httpServer
 import (
 	"fmt"
 
+	"github.com/TimDebug/FitByte/src/config"
+	"github.com/TimDebug/FitByte/src/di"
+	activityController "github.com/TimDebug/FitByte/src/http/controllers/activity"
+	userController "github.com/TimDebug/FitByte/src/http/controllers/user"
+	"github.com/TimDebug/FitByte/src/http/routes"
+	activityroutes "github.com/TimDebug/FitByte/src/http/routes/activity"
+	userroutes "github.com/TimDebug/FitByte/src/http/routes/user"
 	"github.com/gofiber/fiber/v2"
-	"github.com/rafitanujaya/go-fiber-template/src/config"
-	"github.com/rafitanujaya/go-fiber-template/src/di"
-	activityController "github.com/rafitanujaya/go-fiber-template/src/http/controllers/activity"
-	userController "github.com/rafitanujaya/go-fiber-template/src/http/controllers/user"
-	"github.com/rafitanujaya/go-fiber-template/src/http/routes"
-	activityroutes "github.com/rafitanujaya/go-fiber-template/src/http/routes/activity"
-	userroutes "github.com/rafitanujaya/go-fiber-template/src/http/routes/user"
 	"github.com/samber/do/v2"
 )
 
@@ -23,7 +23,7 @@ func (s *HttpServer) Listen() {
 	})
 
 	fmt.Printf("Inject Controllers\n")
-	//? Depedency Injection
+	//? Dependency Injection
 	//? UserController
 	uc := do.MustInvoke[userController.UserControllerInterface](di.Injector)
 	ac := do.MustInvoke[activityController.ActivityControllerInterface](di.Injector)
@@ -32,6 +32,6 @@ func (s *HttpServer) Listen() {
 	userroutes.SetRouteUsers(routes, uc)
 	activityroutes.SetRouteActivities(routes, ac)
 
-	fmt.Printf("Start Lister\n")
+	fmt.Printf("Start Listener\n")
 	app.Listen(fmt.Sprintf("%s:%s", "0.0.0.0", config.GetPort()))
 }
