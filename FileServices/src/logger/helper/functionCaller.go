@@ -6,4 +6,6 @@ const (
 	UserRepositoryCreate   FunctionCaller = "userRepository.Create"
 	UserServiceRegister    FunctionCaller = "userService.Register"
 	UserControllerRegister FunctionCaller = "userController.Register"
+
+	FileServiceUpload FunctionCaller = "fileService.Upload"
 )
