@@ -31,6 +31,7 @@ WORKDIR /root/
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/main .
 COPY --from=builder /app/.env . 
+COPY --from=builder /app/src/database/migrations ./src/database/migrations
 
 # Tentukan argumen untuk port
 ARG PORT
