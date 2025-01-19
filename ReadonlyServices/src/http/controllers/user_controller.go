@@ -2,9 +2,10 @@ package controllers
 
 import (
 	"context"
+
+	"github.com/TimDebug/FitByte/src/exceptions"
+	"github.com/TimDebug/FitByte/src/services"
 	"github.com/gofiber/fiber/v2"
-	"github.com/rafitanujaya/go-fiber-template/src/exceptions"
-	"github.com/rafitanujaya/go-fiber-template/src/services"
 	"github.com/samber/do/v2"
 )
 

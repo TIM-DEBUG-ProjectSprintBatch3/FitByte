@@ -2,7 +2,8 @@ package repositories
 
 import (
 	"context"
-	Entity "github.com/rafitanujaya/go-fiber-template/src/model/entities"
+
+	Entity "github.com/TimDebug/FitByte/src/model/entities"
 )
 
 type UserRepository interface {

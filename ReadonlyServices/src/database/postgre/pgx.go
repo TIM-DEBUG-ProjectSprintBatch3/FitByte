@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/TimDebug/FitByte/src/config"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/rafitanujaya/go-fiber-template/src/config"
 	"github.com/samber/do/v2"
 )
 

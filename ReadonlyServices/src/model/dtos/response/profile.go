@@ -1,6 +1,6 @@
 package response
 
-import Entity "github.com/rafitanujaya/go-fiber-template/src/model/entities"
+import Entity "github.com/TimDebug/FitByte/src/model/entities"
 
 type ProfileResponse struct {
 	Preference *Entity.Preference `json:"preference"`

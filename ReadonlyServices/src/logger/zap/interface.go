@@ -1,6 +1,6 @@
 package loggerZap
 
-import functionCallerInfo "github.com/rafitanujaya/go-fiber-template/src/logger/helper"
+import functionCallerInfo "github.com/TimDebug/FitByte/src/logger/helper"
 
 type LoggerInterface interface {
 	Info(msg string, function functionCallerInfo.FunctionCaller, data ...interface{})
