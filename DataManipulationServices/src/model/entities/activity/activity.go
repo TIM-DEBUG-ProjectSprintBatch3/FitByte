@@ -16,6 +16,11 @@ type Activity struct {
 	UpdatedAt         time.Time
 }
 
+type CaloriesFactor struct {
+	ActivityType      *string
+	DurationInMinutes *int
+}
+
 type ActivityType string
 
 const (
@@ -31,7 +36,7 @@ const (
 	JumpRope   ActivityType = "JumpRope"
 )
 
-func CountCalories(mins int64, activityType ActivityType) float64 {
+func CountCalories(minutes int64, activityType ActivityType) float64 {
 	caloriesPerMinute := map[ActivityType]float64{
 		Walking:    4.0,
 		Yoga:       4.0,
@@ -46,7 +51,7 @@ func CountCalories(mins int64, activityType ActivityType) float64 {
 	}
 
 	if calories, exists := caloriesPerMinute[activityType]; exists {
-		return calories * float64(mins)
+		return calories * float64(minutes)
 	}
 	return 0.0
 }
