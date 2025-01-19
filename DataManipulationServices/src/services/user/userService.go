@@ -84,7 +84,7 @@ func (us *userService) Register(ctx context.Context, input request.UserRegister)
 
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.MinCost)
 	if err != nil {
-		return response.UserRegister{}, err
+		return response.UserRegister{}, exceptions.ErrBadRequest(err.Error())
 	}
 
 	user.PasswordHash = string(passwordHash)
@@ -92,24 +92,22 @@ func (us *userService) Register(ctx context.Context, input request.UserRegister)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "23505") {
-			return response.UserRegister{}, exceptions.NewConflictError("Data Conflict", 409)
+			return response.UserRegister{}, exceptions.ErrConflict(err.Error())
 		} else {
 			us.Logger.Error(err.Error(), functionCallerInfo.UserServiceRegister)
-			return response.UserRegister{}, err
+			return response.UserRegister{}, exceptions.ErrBadRequest(err.Error())
 		}
 	}
 
 	token, err := us.jwtService.GenerateToken(user.Id)
-
 	if err != nil {
-		return response.UserRegister{}, err
+		return response.UserRegister{}, exceptions.ErrServer(err.Error())
 	}
 
 	return response.UserRegister{
 		Email: user.Email,
 		Token: token,
 	}, nil
-
 }
 
 func (us *userService) Update(ctx context.Context, id string, req request.UpdateProfile) (*response.UpdateProfile, error) {

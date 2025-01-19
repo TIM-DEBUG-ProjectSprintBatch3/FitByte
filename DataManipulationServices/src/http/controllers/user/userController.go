@@ -27,8 +27,7 @@ func NewUserControllerInject(i do.Injector) (UserControllerInterface, error) {
 func (uc *UserController) Login(c *fiber.Ctx) error {
 	bodyParsed := request.UserRegister{}
 	if err := c.BodyParser(&bodyParsed); err != nil {
-		return c.Status(int(err.(exceptions.ErrorResponse).StatusCode)).
-			JSON(err)
+		return c.Status(http.StatusBadRequest).JSON(exceptions.ErrBadRequest(err.Error()))
 	}
 
 	response, err := uc.userService.Login(context.Background(), bodyParsed)
@@ -45,8 +44,7 @@ func (uc *UserController) Register(c *fiber.Ctx) error {
 	userRequestParse := request.UserRegister{}
 
 	if err := c.BodyParser(&userRequestParse); err != nil {
-		return c.Status(int(err.(exceptions.ErrorResponse).StatusCode)).
-			JSON(err)
+		return c.Status(http.StatusBadRequest).JSON(exceptions.ErrBadRequest(err.Error()))
 	}
 
 	response, err := uc.userService.Register(context.Background(), userRequestParse)
