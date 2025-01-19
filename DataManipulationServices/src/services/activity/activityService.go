@@ -5,6 +5,7 @@ import (
 	"time"
 
 	authJwt "github.com/TimDebug/FitByte/src/auth/jwt"
+	"github.com/TimDebug/FitByte/src/exceptions"
 	functionCallerInfo "github.com/TimDebug/FitByte/src/logger/helper"
 	loggerZap "github.com/TimDebug/FitByte/src/logger/zap"
 	"github.com/TimDebug/FitByte/src/model/dtos/request"
@@ -12,14 +13,6 @@ import (
 	Entity "github.com/TimDebug/FitByte/src/model/entities/activity"
 	activityRepository "github.com/TimDebug/FitByte/src/repositories/activity"
 	"github.com/jackc/pgx/v5/pgxpool"
-	authJwt "github.com/rafitanujaya/go-fiber-template/src/auth/jwt"
-	"github.com/rafitanujaya/go-fiber-template/src/exceptions"
-	functionCallerInfo "github.com/rafitanujaya/go-fiber-template/src/logger/helper"
-	loggerZap "github.com/rafitanujaya/go-fiber-template/src/logger/zap"
-	"github.com/rafitanujaya/go-fiber-template/src/model/dtos/request"
-	"github.com/rafitanujaya/go-fiber-template/src/model/dtos/response"
-	Entity "github.com/rafitanujaya/go-fiber-template/src/model/entities/activity"
-	activityRepository "github.com/rafitanujaya/go-fiber-template/src/repositories/activity"
 	"github.com/samber/do/v2"
 )
 
