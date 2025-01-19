@@ -7,4 +7,5 @@ import (
 
 func SetRouteUsers(router fiber.Router, uc userController.UserControllerInterface) {
 	router.Post("/register", uc.Register)
+	router.Patch("/user", uc.Update)
 }

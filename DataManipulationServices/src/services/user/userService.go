@@ -43,7 +43,7 @@ func (us *userService) Register(ctx context.Context, input request.UserRegister)
 
 	user := Entity.User{}
 
-	timeNow := time.Now().Unix()
+	timeNow := time.Now()
 	user.CreatedAt = timeNow
 	user.UpdatedAt = timeNow
 	user.Email = input.Email
@@ -54,7 +54,7 @@ func (us *userService) Register(ctx context.Context, input request.UserRegister)
 		return response.UserRegister{}, err
 	}
 
-	user.Password = string(passwordHash)
+	user.PasswordHash = string(passwordHash)
 
 	user.Id, err = us.UserRepository.CreateUser(ctx, us.Db, user)
 
@@ -78,4 +78,40 @@ func (us *userService) Register(ctx context.Context, input request.UserRegister)
 		Token: token,
 	}, nil
 
+}
+
+func (us *userService) Update(ctx context.Context, id string, req request.UpdateProfile) (*response.UpdateProfile, error) {
+	profile, err := us.UserRepository.FindById(context.Background(), id)
+	if err != nil {
+		us.Logger.Error(err.Error(), functionCallerInfo.UserServiceUpdate, err)
+		return nil, err
+	}
+
+	profile.Preference = &req.Preference
+	profile.WeightUnit = &req.WeightUnit
+	profile.HeightUnit = &req.HeightUnit
+	profile.Weight = &req.Weight
+	profile.Height = &req.Height
+	if req.Name != nil {
+		profile.Name = req.Name
+	}
+	if req.ImageUri != nil {
+		profile.ImageUri = req.ImageUri
+	}
+
+	_, err = us.UserRepository.Update(context.Background(), id, *profile)
+	if err != nil {
+		us.Logger.Error(err.Error(), functionCallerInfo.UserServiceUpdate, err)
+		return nil, err
+	}
+
+	return &response.UpdateProfile{
+		Preference: *profile.Preference,
+		WeightUnit: *profile.WeightUnit,
+		HeightUnit: *profile.HeightUnit,
+		Weight:     *profile.Weight,
+		Height:     *profile.Height,
+		Name:       profile.Name,
+		ImageUri:   profile.ImageUri,
+	}, nil
 }

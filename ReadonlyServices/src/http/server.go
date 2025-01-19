@@ -2,6 +2,8 @@ package httpServer
 
 import (
 	"fmt"
+	"github.com/rafitanujaya/go-fiber-template/src/http/controllers"
+	"github.com/rafitanujaya/go-fiber-template/src/http/middlewares"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/rafitanujaya/go-fiber-template/src/config"
@@ -27,6 +29,9 @@ func (s *HttpServer) Listen() {
 
 	routes := routes.SetRoutes(app)
 	activityroutes.SetRouteActivities(routes, ac)
+
+	userController := do.MustInvoke[controllers.UserController](di.Injector)
+	routes.Get("/user", middlewares.AuthMiddleware, userController.GetProfile)
 
 	fmt.Printf("Start Listener\n")
 	app.Listen(fmt.Sprintf("%s:%s", "0.0.0.0", config.GetPort()))
