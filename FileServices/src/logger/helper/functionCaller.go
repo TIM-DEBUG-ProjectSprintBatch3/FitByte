@@ -7,5 +7,6 @@ const (
 	UserServiceRegister    FunctionCaller = "userService.Register"
 	UserControllerRegister FunctionCaller = "userController.Register"
 
-	FileServiceUpload FunctionCaller = "fileService.Upload"
+	FileServiceUpload    FunctionCaller = "fileService.Upload"
+	FileControllerUpload FunctionCaller = "fileController.Upload"
 )
