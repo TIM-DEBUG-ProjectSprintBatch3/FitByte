@@ -9,4 +9,5 @@ import (
 
 type ActivityServiceInterface interface {
 	Create(ctx context.Context, req request.RequestActivity) (response.ResponseActivity, error)
+	Update(ctx context.Context, req request.RequestActivity, userId, activityId string) (response.ResponseActivity, error)
 }
