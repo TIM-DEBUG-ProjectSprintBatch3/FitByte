@@ -2,6 +2,7 @@ package userController
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/TimDebug/FitByte/src/exceptions"
 	"github.com/TimDebug/FitByte/src/model/dtos/request"
@@ -21,6 +22,20 @@ func NewUserController(userService userService.UserServiceInterface) UserControl
 func NewUserControllerInject(i do.Injector) (UserControllerInterface, error) {
 	_userService := do.MustInvoke[userService.UserServiceInterface](i)
 	return NewUserController(_userService), nil
+}
+
+func (uc *UserController) Login(c *fiber.Ctx) error {
+	bodyParsed := request.UserRegister{}
+	if err := c.BodyParser(&bodyParsed); err != nil {
+		return err
+	}
+
+	response, err := uc.userService.Login(context.Background(), bodyParsed)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(http.StatusOK).JSON(response)
 }
 
 func (uc *UserController) Register(c *fiber.Ctx) error {

@@ -25,6 +25,34 @@ func NewUserRepositoryInject(i do.Injector) (UserRepositoryInterface, error) {
 	), nil
 }
 
+func (ur *UserRepository) Login(ctx context.Context, pool *pgxpool.Pool, body *Entity.User) ([]Entity.User, error) {
+	query := `
+		SELECT id, email, password_hash
+		FROM Users
+		WHERE email = $1
+	`
+	rows, err := pool.Query(ctx, query, body.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	var users []Entity.User
+	for rows.Next() {
+		var user Entity.User
+		if err := rows.Scan(&user.Id, &user.Email, &user.PasswordHash); err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return users, nil
+}
+
 func (ur *UserRepository) CreateUser(ctx context.Context, pool *pgxpool.Pool, user Entity.User) (userId string, err error) {
 	query := `INSERT INTO users(email, password_hash) VALUES($1, $2) RETURNING id`
 	fmt.Printf("Email: %s, Password %s", user.Email, user.PasswordHash)
