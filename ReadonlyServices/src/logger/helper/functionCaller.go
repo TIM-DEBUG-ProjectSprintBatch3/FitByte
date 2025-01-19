@@ -5,6 +5,7 @@ type FunctionCaller string
 const (
 	UserRepositoryCreate   FunctionCaller = "userRepository.Create"
 	UserServiceRegister    FunctionCaller = "userService.Register"
+	UserServiceGetProfile  FunctionCaller = "userService.GetProfile"
 	UserControllerRegister FunctionCaller = "userController.Register"
 
 	ActivityRepositoryGetAll FunctionCaller = "activityRepository.GetAll"
