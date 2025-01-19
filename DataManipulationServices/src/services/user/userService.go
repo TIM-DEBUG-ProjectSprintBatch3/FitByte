@@ -2,7 +2,6 @@ package userService
 
 import (
 	"context"
-	"fmt"
 	"strings"
 	"time"
 
@@ -60,7 +59,6 @@ func (us *userService) Register(ctx context.Context, input request.UserRegister)
 	user.Id, err = us.UserRepository.CreateUser(ctx, us.Db, user)
 
 	if err != nil {
-		fmt.Println(err)
 		if strings.Contains(err.Error(), "23505") {
 			return response.UserRegister{}, exceptions.NewConflictError("Data Conflict", 409)
 		} else {
