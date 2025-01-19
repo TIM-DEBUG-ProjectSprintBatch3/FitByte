@@ -5,11 +5,11 @@ type ErrorResponse struct {
 	Message    string
 }
 
-func NewErrorResponse(statusCode int16, message string) *ErrorResponse {
-	return &ErrorResponse{StatusCode: statusCode, Message: message}
+func NewErrorResponse(statusCode int16, message string) ErrorResponse {
+	return ErrorResponse{StatusCode: statusCode, Message: message}
 }
 
-func (e *ErrorResponse) Error() string {
+func (e ErrorResponse) Error() string {
 	return e.Message
 }
 

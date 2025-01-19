@@ -27,14 +27,17 @@ func NewUserControllerInject(i do.Injector) (UserControllerInterface, error) {
 func (uc *UserController) Login(c *fiber.Ctx) error {
 	bodyParsed := request.UserRegister{}
 	if err := c.BodyParser(&bodyParsed); err != nil {
-		return err
+		return c.Status(int(err.(exceptions.ErrorResponse).StatusCode)).
+			JSON(err)
 	}
 
 	response, err := uc.userService.Login(context.Background(), bodyParsed)
 	if err != nil {
-		return err
+		return c.Status(int(err.(exceptions.ErrorResponse).StatusCode)).
+			JSON(err)
 	}
 
+	c.Set("X-Author", "TIM-DEBUG")
 	return c.Status(http.StatusOK).JSON(response)
 }
 
@@ -42,13 +45,14 @@ func (uc *UserController) Register(c *fiber.Ctx) error {
 	userRequestParse := request.UserRegister{}
 
 	if err := c.BodyParser(&userRequestParse); err != nil {
-		panic(exceptions.NewBadRequestError(err.Error(), 400))
+		return c.Status(int(err.(exceptions.ErrorResponse).StatusCode)).
+			JSON(err)
 	}
 
 	response, err := uc.userService.Register(context.Background(), userRequestParse)
-
 	if err != nil {
-		return err
+		return c.Status(int(err.(exceptions.ErrorResponse).StatusCode)).
+			JSON(err)
 	}
 
 	c.Set("X-Author", "TIM-DEBUG")
