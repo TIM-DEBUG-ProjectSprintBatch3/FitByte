@@ -115,3 +115,33 @@ func (ar *ActivityRepository) Update(ctx context.Context, pool *pgxpool.Pool, ac
 
 	return nil
 }
+
+func (ar *ActivityRepository) GetActivityByUserId(ctx context.Context, pool *pgxpool.Pool, activityId, userId string) (string, error) {
+	query := `SELECT id FROM activities WHERE id = $1 AND user_id = $2 LIMIT 1;`
+
+	rows, err := pool.Query(ctx, query, activityId, userId)
+	if err != nil {
+		return "", err
+	}
+
+	var id string
+	for rows.Next() {
+		err = rows.Scan(&id)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return id, nil
+}
+
+func (ar *ActivityRepository) Delete(ctx context.Context, pool *pgxpool.Pool, activityId, userId string) error {
+	query := `DELETE FROM activities WHERE id = $1 AND user_id = $2`
+
+	_, err := pool.Exec(ctx, query, activityId, userId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

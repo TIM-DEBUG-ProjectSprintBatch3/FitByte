@@ -2,6 +2,7 @@ package activityService
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	authJwt "github.com/TimDebug/FitByte/src/auth/jwt"
@@ -138,4 +139,23 @@ func (as *activityService) Update(ctx context.Context, input request.RequestActi
 		CreatedAt:         activity.CreatedAt.Format(time.RFC3339),
 		UpdatedAt:         activity.UpdatedAt.Format(time.RFC3339),
 	}, nil
+}
+
+func (as *activityService) Delete(ctx context.Context, userId, activityId string) error {
+	id, err := as.ActivityRepository.GetActivityByUserId(ctx, as.Db, activityId, userId)
+	if err != nil {
+		as.Logger.Error(err.Error(), functionCallerInfo.ActivityServiceDelete)
+		return err
+	}
+
+	if id == "" {
+		return errors.New("no rows")
+	}
+
+	err = as.ActivityRepository.Delete(ctx, as.Db, userId, activityId)
+	if err != nil {
+		as.Logger.Error(err.Error(), functionCallerInfo.ActivityServiceDelete)
+		return err
+	}
+	return nil
 }
