@@ -3,8 +3,8 @@ package userRepository
 import (
 	"context"
 
+	Entity "github.com/TimDebug/FitByte/src/model/entities/user"
 	"github.com/jackc/pgx/v5/pgxpool"
-	Entity "github.com/rafitanujaya/go-fiber-template/src/model/entities/user"
 )
 
 type UserRepositoryInterface interface {

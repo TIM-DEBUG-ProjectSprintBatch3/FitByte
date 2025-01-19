@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rafitanujaya/go-fiber-template/src/infrastructure/domain"
+	"github.com/TimDebug/FitByte/src/infrastructure/domain"
 	"github.com/samber/do/v2"
 )
 
