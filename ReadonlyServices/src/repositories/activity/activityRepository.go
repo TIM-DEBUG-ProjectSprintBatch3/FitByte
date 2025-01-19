@@ -2,7 +2,6 @@ package activityRepository
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	Entity "github.com/rafitanujaya/go-fiber-template/src/model/entities/activity"
@@ -35,7 +34,6 @@ func (ar *ActivityRepository) GetAll(ctx context.Context, pool *pgxpool.Pool, qu
 	`
 	rows, err := pool.Query(ctx, query, queryArgs...)
 	if err != nil {
-		fmt.Println("err rows", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -50,7 +48,6 @@ func (ar *ActivityRepository) GetAll(ctx context.Context, pool *pgxpool.Pool, qu
 			&activity.CaloriesBurned,
 			&activity.CreatedAt,
 		); err != nil {
-			fmt.Println("err scan", err)
 			return activities, err
 		}
 		activities = append(activities, activity)
