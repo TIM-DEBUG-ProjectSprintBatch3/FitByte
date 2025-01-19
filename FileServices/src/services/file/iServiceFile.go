@@ -4,7 +4,7 @@ import (
 	"context"
 	"mime/multipart"
 
-	"github.com/rafitanujaya/go-fiber-template/src/model/dtos/response"
+	"github.com/TimDebug/FitByte/src/model/dtos/response"
 )
 
 type FileServiceInterface interface {

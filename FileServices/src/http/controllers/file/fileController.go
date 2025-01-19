@@ -3,11 +3,11 @@ package fileHandler
 import (
 	"io"
 
+	"github.com/TimDebug/FitByte/src/infrastructure/domain"
+	functionCallerInfo "github.com/TimDebug/FitByte/src/logger/helper"
+	loggerZap "github.com/TimDebug/FitByte/src/logger/zap"
+	fileService "github.com/TimDebug/FitByte/src/services/file"
 	"github.com/gofiber/fiber/v2"
-	"github.com/rafitanujaya/go-fiber-template/src/infrastructure/domain"
-	functionCallerInfo "github.com/rafitanujaya/go-fiber-template/src/logger/helper"
-	loggerZap "github.com/rafitanujaya/go-fiber-template/src/logger/zap"
-	fileService "github.com/rafitanujaya/go-fiber-template/src/services/file"
 	"github.com/samber/do/v2"
 )
 

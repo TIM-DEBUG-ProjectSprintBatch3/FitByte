@@ -9,13 +9,13 @@ import (
 	"os"
 	"sync"
 
+	"github.com/TimDebug/FitByte/src/infrastructure"
+	"github.com/TimDebug/FitByte/src/infrastructure/domain"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	"github.com/rafitanujaya/go-fiber-template/src/infrastructure"
-	"github.com/rafitanujaya/go-fiber-template/src/infrastructure/domain"
 	"github.com/samber/do/v2"
 )
 

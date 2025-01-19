@@ -2,10 +2,11 @@ package services
 
 import (
 	"context"
-	functionCallerInfo "github.com/rafitanujaya/go-fiber-template/src/logger/helper"
-	loggerZap "github.com/rafitanujaya/go-fiber-template/src/logger/zap"
-	"github.com/rafitanujaya/go-fiber-template/src/model/dtos/response"
-	"github.com/rafitanujaya/go-fiber-template/src/repositories"
+
+	functionCallerInfo "github.com/TimDebug/FitByte/src/logger/helper"
+	loggerZap "github.com/TimDebug/FitByte/src/logger/zap"
+	"github.com/TimDebug/FitByte/src/model/dtos/response"
+	"github.com/TimDebug/FitByte/src/repositories"
 	"github.com/samber/do/v2"
 )
 

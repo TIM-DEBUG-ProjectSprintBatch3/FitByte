@@ -1,7 +1,7 @@
 package loggerZap
 
 import (
-	functionCallerInfo "github.com/rafitanujaya/go-fiber-template/src/logger/helper"
+	functionCallerInfo "github.com/TimDebug/FitByte/src/logger/helper"
 	"github.com/samber/do/v2"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

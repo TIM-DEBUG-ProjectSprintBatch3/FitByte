@@ -1,4 +1,4 @@
-module github.com/rafitanujaya/go-fiber-template
+module github.com/TimDebug/FitByte
 
 go 1.23.4
 

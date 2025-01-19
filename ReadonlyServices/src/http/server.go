@@ -2,15 +2,16 @@ package httpServer
 
 import (
 	"fmt"
-	"github.com/rafitanujaya/go-fiber-template/src/http/controllers"
-	"github.com/rafitanujaya/go-fiber-template/src/http/middlewares"
 
+	"github.com/TimDebug/FitByte/src/http/controllers"
+	"github.com/TimDebug/FitByte/src/http/middlewares"
+
+	"github.com/TimDebug/FitByte/src/config"
+	"github.com/TimDebug/FitByte/src/di"
+	activityController "github.com/TimDebug/FitByte/src/http/controllers/activity"
+	"github.com/TimDebug/FitByte/src/http/routes"
+	activityroutes "github.com/TimDebug/FitByte/src/http/routes/activity"
 	"github.com/gofiber/fiber/v2"
-	"github.com/rafitanujaya/go-fiber-template/src/config"
-	"github.com/rafitanujaya/go-fiber-template/src/di"
-	activityController "github.com/rafitanujaya/go-fiber-template/src/http/controllers/activity"
-	"github.com/rafitanujaya/go-fiber-template/src/http/routes"
-	activityroutes "github.com/rafitanujaya/go-fiber-template/src/http/routes/activity"
 	"github.com/samber/do/v2"
 )
 

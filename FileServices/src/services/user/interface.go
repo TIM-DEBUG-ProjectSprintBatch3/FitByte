@@ -3,8 +3,8 @@ package userService
 import (
 	"context"
 
-	"github.com/rafitanujaya/go-fiber-template/src/model/dtos/request"
-	"github.com/rafitanujaya/go-fiber-template/src/model/dtos/response"
+	"github.com/TimDebug/FitByte/src/model/dtos/request"
+	"github.com/TimDebug/FitByte/src/model/dtos/response"
 )
 
 type UserServiceInterface interface {

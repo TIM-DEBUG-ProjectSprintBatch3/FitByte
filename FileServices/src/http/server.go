@@ -1,12 +1,12 @@
 package httpServer
 
 import (
+	"github.com/TimDebug/FitByte/src/config"
+	"github.com/TimDebug/FitByte/src/di"
+	userController "github.com/TimDebug/FitByte/src/http/controllers/user"
+	"github.com/TimDebug/FitByte/src/http/routes"
+	userroutes "github.com/TimDebug/FitByte/src/http/routes/user"
 	"github.com/gofiber/fiber/v2"
-	"github.com/rafitanujaya/go-fiber-template/src/config"
-	"github.com/rafitanujaya/go-fiber-template/src/di"
-	userController "github.com/rafitanujaya/go-fiber-template/src/http/controllers/user"
-	"github.com/rafitanujaya/go-fiber-template/src/http/routes"
-	userroutes "github.com/rafitanujaya/go-fiber-template/src/http/routes/user"
 	"github.com/samber/do/v2"
 )
 

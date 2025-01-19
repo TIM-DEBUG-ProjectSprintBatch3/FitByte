@@ -3,8 +3,9 @@ package repositories
 import (
 	"context"
 	"fmt"
+
+	Entity "github.com/TimDebug/FitByte/src/model/entities"
 	"github.com/jackc/pgx/v5/pgxpool"
-	Entity "github.com/rafitanujaya/go-fiber-template/src/model/entities"
 	"github.com/samber/do/v2"
 )
 
