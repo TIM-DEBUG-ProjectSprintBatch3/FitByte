@@ -1,4 +1,4 @@
-package fileHandler
+package fileController
 
 import (
 	"io"
@@ -11,21 +11,21 @@ import (
 	"github.com/samber/do/v2"
 )
 
-type FileHandler interface {
+type FileController interface {
 	Upload(ctx *fiber.Ctx) error
 }
 
-type handler struct {
+type fileController struct {
 	service       fileService.FileServiceInterface
 	logger        loggerZap.LoggerInterface
 	storageClient domain.StorageClient
 }
 
-func NewHandler(service fileService.FileServiceInterface, logger loggerZap.LoggerInterface, storageClient domain.StorageClient) FileHandler {
-	return &handler{service: service, logger: logger, storageClient: storageClient}
+func NewHandler(service fileService.FileServiceInterface, logger loggerZap.LoggerInterface, storageClient domain.StorageClient) FileController {
+	return &fileController{service: service, logger: logger, storageClient: storageClient}
 }
 
-func NewInject(i do.Injector) (FileHandler, error) {
+func NewInject(i do.Injector) (FileController, error) {
 	_service := do.MustInvoke[fileService.FileServiceInterface](i)
 	_logger := do.MustInvoke[loggerZap.LoggerInterface](i)
 	_storageClient := do.MustInvoke[domain.StorageClient](i)
@@ -47,7 +47,7 @@ func NewInject(i do.Injector) (FileHandler, error) {
 // @Failure 413 {object} helper.Response{errors=helper.ErrorResponse} "Payload Too Large"
 // @Failure 401 {object} helper.Response{errors=helper.ErrorResponse} "Unauthorized - Missing or invalid token"
 // @Router /v1/file [POST]
-func (h handler) Upload(ctx *fiber.Ctx) error {
+func (h fileController) Upload(ctx *fiber.Ctx) error {
 	// Validasi token
 	if ctx.Get("Authorization") == "" {
 		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Authorization token is required"})

@@ -1,11 +1,13 @@
 package httpServer
 
 import (
+	"fmt"
+
 	"github.com/TimDebug/FitByte/src/config"
 	"github.com/TimDebug/FitByte/src/di"
-	userController "github.com/TimDebug/FitByte/src/http/controllers/user"
+	fileController "github.com/TimDebug/FitByte/src/http/controllers/file"
 	"github.com/TimDebug/FitByte/src/http/routes"
-	userroutes "github.com/TimDebug/FitByte/src/http/routes/user"
+	fileRoutes "github.com/TimDebug/FitByte/src/http/routes/file"
 	"github.com/gofiber/fiber/v2"
 	"github.com/samber/do/v2"
 )
@@ -18,10 +20,10 @@ func (s *HttpServer) Listen() {
 	})
 
 	//? Depedency Injection
-	//? UserController
-	uc := do.MustInvoke[userController.UserControllerInterface](di.Injector)
+	fileController := do.MustInvoke[fileController.FileController](di.Injector)
 
 	routes := routes.SetRoutes(app)
-	userroutes.SetRouteUsers(routes, uc)
-	app.Listen(config.GetPort())
+	fileRoutes.SetRouteUsers(routes, fileController)
+
+	app.Listen(fmt.Sprintf("%s:%s", "0.0.0.0", config.GetPort()))
 }

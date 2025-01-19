@@ -3,10 +3,9 @@ package di
 import (
 	authJwt "github.com/TimDebug/FitByte/src/auth/jwt"
 	"github.com/TimDebug/FitByte/src/database/postgre"
-	userController "github.com/TimDebug/FitByte/src/http/controllers/user"
+	fileController "github.com/TimDebug/FitByte/src/http/controllers/file"
 	loggerZap "github.com/TimDebug/FitByte/src/logger/zap"
-	userRepository "github.com/TimDebug/FitByte/src/repositories/user"
-	userService "github.com/TimDebug/FitByte/src/services/user"
+	fileService "github.com/TimDebug/FitByte/src/services/file"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/samber/do/v2"
 )
@@ -28,14 +27,10 @@ func init() {
 	do.Provide[authJwt.JwtServiceInterface](Injector, authJwt.NewJwtServiceInject)
 
 	//? Setup Repositories
-	//? User Repository
-	do.Provide[userRepository.UserRepositoryInterface](Injector, userRepository.NewUserRepositoryInject)
 
 	//? Setup Services
-	//? User Service
-	do.Provide[userService.UserServiceInterface](Injector, userService.NewUserServiceInject)
+	do.Provide[fileService.FileServiceInterface](Injector, fileService.NewInject)
 
 	//? Setup Controller/Handler
-	//? User Controller
-	do.Provide[userController.UserControllerInterface](Injector, userController.NewUserControllerInject)
+	do.Provide[fileController.FileController](Injector, fileController.NewInject)
 }
