@@ -1,9 +1,14 @@
 package di
 
 import (
+	"fmt"
+	"os"
+
 	authJwt "github.com/TimDebug/FitByte/src/auth/jwt"
 	"github.com/TimDebug/FitByte/src/database/postgre"
 	fileController "github.com/TimDebug/FitByte/src/http/controllers/file"
+	"github.com/TimDebug/FitByte/src/infrastructure/domain"
+	"github.com/TimDebug/FitByte/src/infrastructure/storage"
 	loggerZap "github.com/TimDebug/FitByte/src/logger/zap"
 	fileService "github.com/TimDebug/FitByte/src/services/file"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -17,6 +22,14 @@ func init() {
 
 	//? Setup Database Connection
 	do.Provide[*pgxpool.Pool](Injector, postgre.NewPgxConnectInject)
+
+	envMode := os.Getenv("MODE")
+	fmt.Printf("Mode :%s", envMode)
+	if envMode == "DEBUG" {
+		do.Provide[domain.StorageClient](Injector, storage.NewMockStorageClientInject)
+	} else {
+		do.Provide[domain.StorageClient](Injector, storage.NewS3StorageClientInject)
+	}
 
 	//? Logger
 	//? Zap
