@@ -90,7 +90,7 @@ func (uc *UserController) Update(c *fiber.Ctx) error {
 	if nameLength < 2 || nameLength > 62 {
 		return fiber.NewError(fiber.StatusBadRequest, "name must be between 2 and 62 characters")
 	}
-	if &updateRequest.ImageUri == nil {
+	if updateRequest.ImageUri == nil {
 		return c.Status(fiber.StatusBadRequest).JSON("imageuri is nil")
 	}
 
