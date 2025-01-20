@@ -18,4 +18,8 @@ const (
 	ActivityRepositoryUpdate FunctionCaller = "activityRepository.Update"
 	ActivityServiceUpdate    FunctionCaller = "activityService.Update"
 	ActivityControllerUpdate FunctionCaller = "activityController.Update"
+
+	ActivityRepositoryDelete FunctionCaller = "activityRepository.Delete"
+	ActivityServiceDelete    FunctionCaller = "activityService.Delete"
+	ActivityControllerDelete FunctionCaller = "activityController.Delete"
 )

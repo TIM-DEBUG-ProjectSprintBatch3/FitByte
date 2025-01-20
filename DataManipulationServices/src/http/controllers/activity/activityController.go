@@ -160,6 +160,57 @@ func (ac *ActivityController) Update(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(response)
 }
 
+func (ac *ActivityController) Delete(c *fiber.Ctx) error {
+	activityId := c.Params("activityId")
+	if activityId == "" {
+		return c.Status(fiber.StatusNotFound).JSON(
+			exceptions.NewBadRequestError(
+				"Missing activityId route parameter",
+				fiber.StatusNotFound,
+			),
+		)
+	}
+
+	userId, ok := c.Locals("userId").(string)
+	if !ok {
+		return c.Status(fiber.StatusUnauthorized).JSON(
+			exceptions.NewUnauthorizedError(
+				fiber.ErrUnauthorized.Error(),
+				fiber.StatusUnauthorized,
+			),
+		)
+	}
+
+	err := ac.activityService.Delete(c.Context(), userId, activityId)
+	if err != nil {
+		if strings.Contains(err.Error(), "23503") || strings.Contains(err.Error(), "Unauthorized") {
+			return c.Status(fiber.StatusUnauthorized).JSON(
+				exceptions.NewUnauthorizedError(
+					fiber.ErrUnauthorized.Message,
+					fiber.StatusUnauthorized,
+				),
+			)
+		}
+		if strings.Contains(err.Error(), "no rows") {
+			return c.Status(fiber.StatusNotFound).JSON(
+				exceptions.NewNotFoundError(
+					fiber.ErrNotFound.Message,
+					fiber.StatusNotFound,
+				),
+			)
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(
+			exceptions.NewBadRequestError(
+				"Internal server error",
+				fiber.StatusInternalServerError,
+			),
+		)
+	}
+
+	c.Set("X-Author", "TIM-DEBUG")
+	return c.Status(fiber.StatusOK).JSON(nil)
+}
+
 func validateCreateReq(req request.RequestActivity) (errMsg string) {
 	if req.ActivityType == nil || req.DoneAt == nil || req.DurationInMinutes == nil ||
 		*req.ActivityType == "" || *req.DoneAt == "" || *req.DurationInMinutes < 1 {
