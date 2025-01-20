@@ -1,14 +1,13 @@
 package activityService
 
 import (
-	"context"
-
 	"github.com/TimDebug/FitByte/src/model/dtos/request"
 	"github.com/TimDebug/FitByte/src/model/dtos/response"
+	"github.com/gofiber/fiber/v2"
 )
 
 type ActivityServiceInterface interface {
-	Create(ctx context.Context, req request.RequestActivity) (response.ResponseActivity, error)
-	Update(ctx context.Context, req request.RequestActivity, userId, activityId string) (response.ResponseActivity, error)
-	Delete(ctx context.Context, userId, activityId string) error
+	Create(ctx *fiber.Ctx, req request.RequestActivity) (response.ResponseActivity, error)
+	Update(ctx *fiber.Ctx, req request.RequestActivity, userId, activityId string) (response.ResponseActivity, error)
+	Delete(ctx *fiber.Ctx, userId, activityId string) error
 }

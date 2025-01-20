@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"github.com/TimDebug/FitByte/src/exceptions"
+	functionCallerInfo "github.com/TimDebug/FitByte/src/logger/helper"
+	loggerZap "github.com/TimDebug/FitByte/src/logger/zap"
 	"github.com/TimDebug/FitByte/src/model/dtos/request"
 	Entity "github.com/TimDebug/FitByte/src/model/entities/activity"
 	activityService "github.com/TimDebug/FitByte/src/services/activity"
@@ -14,20 +16,23 @@ import (
 
 type ActivityController struct {
 	activityService activityService.ActivityServiceInterface
+	logger          loggerZap.LoggerInterface
 }
 
-func NewActivityController(activityService activityService.ActivityServiceInterface) ActivityControllerInterface {
-	return &ActivityController{activityService: activityService}
+func NewActivityController(activityService activityService.ActivityServiceInterface, logger loggerZap.LoggerInterface) ActivityControllerInterface {
+	return &ActivityController{activityService: activityService, logger: logger}
 }
 
 func NewActivityControllerInject(i do.Injector) (ActivityControllerInterface, error) {
 	_activityService := do.MustInvoke[activityService.ActivityServiceInterface](i)
-	return NewActivityController(_activityService), nil
+	_logger := do.MustInvoke[loggerZap.LoggerInterface](i)
+	return NewActivityController(_activityService, _logger), nil
 }
 
 func (ac *ActivityController) Create(c *fiber.Ctx) error {
 	userId, ok := c.Locals("userId").(string)
 	if !ok {
+		ac.logger.Warn("Unauthorized", functionCallerInfo.ActivityControllerCreate)
 		return c.Status(fiber.StatusUnauthorized).JSON(
 			exceptions.NewUnauthorizedError(
 				fiber.ErrUnauthorized.Error(),
@@ -40,6 +45,7 @@ func (ac *ActivityController) Create(c *fiber.Ctx) error {
 	req.UserId = &userId
 
 	if err := c.BodyParser(&req); err != nil {
+		ac.logger.Warn(err.Error(), functionCallerInfo.ActivityControllerCreate)
 		return c.Status(fiber.StatusBadRequest).JSON(
 			exceptions.NewBadRequestError(
 				fiber.ErrBadRequest.Error(),
@@ -50,6 +56,7 @@ func (ac *ActivityController) Create(c *fiber.Ctx) error {
 
 	errMsg := validateCreateReq(req)
 	if errMsg != "" {
+		ac.logger.Warn(errMsg, functionCallerInfo.ActivityControllerCreate, req)
 		return c.Status(fiber.StatusBadRequest).JSON(
 			exceptions.NewBadRequestError(
 				errMsg,
@@ -58,8 +65,9 @@ func (ac *ActivityController) Create(c *fiber.Ctx) error {
 		)
 	}
 
-	response, err := ac.activityService.Create(c.Context(), req)
+	response, err := ac.activityService.Create(c, req)
 	if err != nil {
+		ac.logger.Warn(err.Error(), functionCallerInfo.ActivityControllerCreate, req)
 		if strings.Contains(err.Error(), "23503") { // userId doesnt exist anymore
 			return c.Status(fiber.StatusUnauthorized).JSON(
 				exceptions.NewUnauthorizedError(
@@ -125,7 +133,7 @@ func (ac *ActivityController) Update(c *fiber.Ctx) error {
 		DurationInMinutes: &req.DurationInMinutes.Value,
 	}
 
-	response, err := ac.activityService.Update(c.Context(), reqActivity, userId, activityId)
+	response, err := ac.activityService.Update(c, reqActivity, userId, activityId)
 	if err != nil {
 		if strings.Contains(err.Error(), "23503") || strings.Contains(err.Error(), "Unauthorized") { // userId doesnt exist anymore
 			return c.Status(fiber.StatusUnauthorized).JSON(
@@ -176,7 +184,7 @@ func (ac *ActivityController) Delete(c *fiber.Ctx) error {
 		)
 	}
 
-	err := ac.activityService.Delete(c.Context(), userId, activityId)
+	err := ac.activityService.Delete(c, userId, activityId)
 	if err != nil {
 		if strings.Contains(err.Error(), "23503") || strings.Contains(err.Error(), "Unauthorized") {
 			return c.Status(fiber.StatusUnauthorized).JSON(

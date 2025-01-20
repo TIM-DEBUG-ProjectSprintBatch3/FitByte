@@ -1,7 +1,6 @@
 package activityService
 
 import (
-	"context"
 	"errors"
 	"time"
 
@@ -13,6 +12,7 @@ import (
 	"github.com/TimDebug/FitByte/src/model/dtos/response"
 	Entity "github.com/TimDebug/FitByte/src/model/entities/activity"
 	activityRepository "github.com/TimDebug/FitByte/src/repositories/activity"
+	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/samber/do/v2"
 )
@@ -37,7 +37,7 @@ func NewActivityServiceInject(i do.Injector) (ActivityServiceInterface, error) {
 	return NewActivityService(_activityRepo, _db, _jwtService, _logger), nil
 }
 
-func (as *activityService) Create(ctx context.Context, input request.RequestActivity) (response.ResponseActivity, error) {
+func (as *activityService) Create(ctx *fiber.Ctx, input request.RequestActivity) (response.ResponseActivity, error) {
 	activity := Entity.Activity{}
 
 	timeNow := time.Now()
@@ -73,7 +73,7 @@ func (as *activityService) Create(ctx context.Context, input request.RequestActi
 	}, nil
 }
 
-func (as *activityService) Update(ctx context.Context, input request.RequestActivity, userId, activityId string) (response.ResponseActivity, error) {
+func (as *activityService) Update(ctx *fiber.Ctx, input request.RequestActivity, userId, activityId string) (response.ResponseActivity, error) {
 	caloriesFactor, err := as.ActivityRepository.GetValidCaloriesFactors(ctx, as.Db, activityId, userId)
 	if err != nil {
 		as.Logger.Error(err.Error(), functionCallerInfo.ActivityServiceUpdate)
@@ -141,7 +141,7 @@ func (as *activityService) Update(ctx context.Context, input request.RequestActi
 	}, nil
 }
 
-func (as *activityService) Delete(ctx context.Context, userId, activityId string) error {
+func (as *activityService) Delete(ctx *fiber.Ctx, userId, activityId string) error {
 	id, err := as.ActivityRepository.GetActivityByUserId(ctx, as.Db, activityId, userId)
 	if err != nil {
 		as.Logger.Error(err.Error(), functionCallerInfo.ActivityServiceDelete)
