@@ -69,19 +69,12 @@ func (uc *UserController) Register(c *fiber.Ctx) error {
 func (uc *UserController) Update(c *fiber.Ctx) error {
 	userId, ok := c.Locals("userId").(string)
 	if !ok {
-		return c.Status(fiber.StatusUnauthorized).JSON(
-			exceptions.NewUnauthorizedError(
-				fiber.ErrUnauthorized.Error(),
-				fiber.StatusUnauthorized,
-			),
-		)
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.ErrUnauthorized)
 	}
 
 	updateRequest := request.UpdateProfile{}
-
 	if err := c.BodyParser(&updateRequest); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(err.Error())
-		// panic(exceptions.NewBadRequestError(err.Error(), 400))
+		return c.Status(fiber.StatusBadRequest).JSON(err)
 	}
 
 	if updateRequest.Name == nil {
@@ -115,7 +108,7 @@ func (uc *UserController) Update(c *fiber.Ctx) error {
 	response, err := uc.userService.Update(c, userId, updateRequest)
 	if err != nil {
 		uc.logger.Error(err.Error(), functionCallerInfo.ProfileControllerUpdate, userId, updateRequest)
-		return c.Status(fiber.StatusBadRequest).JSON(response)
+		return c.Status(fiber.StatusBadRequest).JSON(err)
 	}
 
 	c.Set("X-Author", "TIM-DEBUG")

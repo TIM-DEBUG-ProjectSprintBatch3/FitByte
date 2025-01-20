@@ -25,7 +25,7 @@ services:
       - sprint_network
     restart: always
     env_file:
-      - .env
+      - ./ReadonlyServices/.env
 
   fitbyte-manipulationdata-service:
     container_name: manipulationdata-service
@@ -53,7 +53,7 @@ services:
       - sprint_network
     restart: always
     env_file:
-      - .env
+      - ./DataManipulationServices/.env
   
   fitbyte-file-service:
     container_name: file-service
@@ -81,7 +81,7 @@ services:
       - sprint_network
     restart: always
     env_file:
-      - .env
+      - ./FileServices/.env
 
   nginx-apigateway:
     build:
