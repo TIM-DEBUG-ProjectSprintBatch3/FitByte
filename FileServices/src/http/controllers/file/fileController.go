@@ -77,7 +77,7 @@ func (h fileController) Upload(ctx *fiber.Ctx) error {
 			h.logger.Warn("Invalid file type. Only jpeg, jpg, or png are allowed.", functionCallerInfo.FileControllerUpload, filepath.Ext(header.Filename))
 			return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Only JPEG, JPG, or PNG files are allowed"})
 		}
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Only JPEG, JPG, or PNG files are allowed"})
+		// return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Only JPEG, JPG, or PNG files are allowed"})
 	}
 
 	// Validasi ukuran file (max 100 KiB)

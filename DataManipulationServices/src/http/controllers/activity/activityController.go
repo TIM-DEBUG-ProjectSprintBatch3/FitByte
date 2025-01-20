@@ -68,12 +68,7 @@ func (ac *ActivityController) Create(c *fiber.Ctx) error {
 				),
 			)
 		}
-		return c.Status(fiber.StatusInternalServerError).JSON(
-			exceptions.NewBadRequestError(
-				"Internal server error",
-				fiber.StatusInternalServerError,
-			),
-		)
+		return c.Status(fiber.StatusBadRequest).JSON(err.Error())
 	}
 
 	c.Set("X-Author", "TIM-DEBUG")
