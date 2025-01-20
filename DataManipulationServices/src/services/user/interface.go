@@ -1,14 +1,13 @@
 package userService
 
 import (
-	"context"
-
 	"github.com/TimDebug/FitByte/src/model/dtos/request"
 	"github.com/TimDebug/FitByte/src/model/dtos/response"
+	"github.com/gofiber/fiber/v2"
 )
 
 type UserServiceInterface interface {
-	Login(ctx context.Context, input request.UserRegister) (response.UserRegister, error)
-	Register(ctx context.Context, input request.UserRegister) (response.UserRegister, error)
-	Update(ctx context.Context, id string, input request.UpdateProfile) (*response.UpdateProfile, error)
+	Login(ctx *fiber.Ctx, input request.UserRegister) (response.UserRegister, error)
+	Register(ctx *fiber.Ctx, input request.UserRegister) (response.UserRegister, error)
+	Update(ctx *fiber.Ctx, id string, input request.UpdateProfile) (*response.UpdateProfile, error)
 }

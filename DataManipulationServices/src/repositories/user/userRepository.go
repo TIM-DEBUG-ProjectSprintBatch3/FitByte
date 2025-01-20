@@ -1,10 +1,10 @@
 package userRepository
 
 import (
-	"context"
 	"fmt"
 
 	Entity "github.com/TimDebug/FitByte/src/model/entities/user"
+	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/samber/do/v2"
 )
@@ -25,13 +25,13 @@ func NewUserRepositoryInject(i do.Injector) (UserRepositoryInterface, error) {
 	), nil
 }
 
-func (ur *UserRepository) Login(ctx context.Context, pool *pgxpool.Pool, body *Entity.User) ([]Entity.User, error) {
+func (ur *UserRepository) Login(ctx *fiber.Ctx, pool *pgxpool.Pool, body *Entity.User) ([]Entity.User, error) {
 	query := `
 		SELECT id, email, password_hash
 		FROM Users
 		WHERE email = $1
 	`
-	rows, err := pool.Query(ctx, query, body.Email)
+	rows, err := pool.Query(ctx.Context(), query, body.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -53,11 +53,11 @@ func (ur *UserRepository) Login(ctx context.Context, pool *pgxpool.Pool, body *E
 	return users, nil
 }
 
-func (ur *UserRepository) CreateUser(ctx context.Context, pool *pgxpool.Pool, user Entity.User) (userId string, err error) {
+func (ur *UserRepository) CreateUser(ctx *fiber.Ctx, pool *pgxpool.Pool, user Entity.User) (userId string, err error) {
 	query := `INSERT INTO users(email, password_hash) VALUES($1, $2) RETURNING id`
 	fmt.Printf("Email: %s, Password %s", user.Email, user.PasswordHash)
 
-	row := pool.QueryRow(ctx, query, user.Email, user.PasswordHash)
+	row := pool.QueryRow(ctx.Context(), query, user.Email, user.PasswordHash)
 	err = row.Scan(&userId)
 	if err != nil {
 		return "", err
@@ -66,9 +66,9 @@ func (ur *UserRepository) CreateUser(ctx context.Context, pool *pgxpool.Pool, us
 
 }
 
-func (ur *UserRepository) FindById(ctx context.Context, id string) (*Entity.User, error) {
+func (ur *UserRepository) FindById(ctx *fiber.Ctx, id string) (*Entity.User, error) {
 	row := ur.db.QueryRow(
-		ctx,
+		ctx.Context(),
 		`
 			SELECT id, email, preference, weight_unit, height_unit, weight, height, name, image_uri, created_at, updated_at 
 			FROM Users 
@@ -85,9 +85,9 @@ func (ur *UserRepository) FindById(ctx context.Context, id string) (*Entity.User
 	return &user, nil
 }
 
-func (ur *UserRepository) Update(ctx context.Context, user Entity.User) (string, error) {
+func (ur *UserRepository) Update(ctx *fiber.Ctx, user Entity.User) (string, error) {
 	_, err := ur.db.Exec(
-		ctx,
+		ctx.Context(),
 		`UPDATE users SET 
 			preference= $1, 
 			weight_unit=$2, 

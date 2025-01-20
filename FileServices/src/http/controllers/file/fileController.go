@@ -2,6 +2,7 @@ package fileController
 
 import (
 	"io"
+	"path/filepath"
 
 	"github.com/TimDebug/FitByte/src/infrastructure/domain"
 	functionCallerInfo "github.com/TimDebug/FitByte/src/logger/helper"
@@ -72,6 +73,10 @@ func (h fileController) Upload(ctx *fiber.Ctx) error {
 
 	if !validTypes[header.Header.Get("Content-Type")] {
 		h.logger.Warn("File ContentType failed:", functionCallerInfo.FileControllerUpload, header.Header.Get("Content-Type"))
+		if !validTypes[filepath.Ext(header.Filename)] {
+			h.logger.Warn("Invalid file type. Only jpeg, jpg, or png are allowed.", functionCallerInfo.FileControllerUpload, filepath.Ext(header.Filename))
+			return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Only JPEG, JPG, or PNG files are allowed"})
+		}
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Only JPEG, JPG, or PNG files are allowed"})
 	}
 

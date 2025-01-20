@@ -1,7 +1,6 @@
 package userService
 
 import (
-	"context"
 	"strings"
 	"time"
 
@@ -14,6 +13,7 @@ import (
 	Entity "github.com/TimDebug/FitByte/src/model/entities/user"
 	userRepository "github.com/TimDebug/FitByte/src/repositories/user"
 	"github.com/TimDebug/FitByte/src/services/user/validator"
+	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/samber/do/v2"
 	"golang.org/x/crypto/bcrypt"
@@ -39,7 +39,7 @@ func NewUserServiceInject(i do.Injector) (UserServiceInterface, error) {
 	return NewUserService(_userRepo, _db, _jwtService, _logger), nil
 }
 
-func (us *userService) Login(ctx context.Context, input request.UserRegister) (response.UserRegister, error) {
+func (us *userService) Login(ctx *fiber.Ctx, input request.UserRegister) (response.UserRegister, error) {
 	err := validator.ValidateAuthParams(input)
 	if err != nil {
 		return response.UserRegister{}, exceptions.ErrBadRequest(err.Error())
@@ -70,7 +70,7 @@ func (us *userService) Login(ctx context.Context, input request.UserRegister) (r
 	return response.UserRegister{Email: users[0].Email, Token: token}, nil
 }
 
-func (us *userService) Register(ctx context.Context, input request.UserRegister) (response.UserRegister, error) {
+func (us *userService) Register(ctx *fiber.Ctx, input request.UserRegister) (response.UserRegister, error) {
 	err := validator.ValidateAuthParams(input)
 	if err != nil {
 		return response.UserRegister{}, exceptions.ErrBadRequest(err.Error())
@@ -110,8 +110,8 @@ func (us *userService) Register(ctx context.Context, input request.UserRegister)
 	}, nil
 }
 
-func (us *userService) Update(ctx context.Context, id string, req request.UpdateProfile) (*response.UpdateProfile, error) {
-	profile, err := us.UserRepository.FindById(context.Background(), id)
+func (us *userService) Update(ctx *fiber.Ctx, id string, req request.UpdateProfile) (*response.UpdateProfile, error) {
+	profile, err := us.UserRepository.FindById(ctx, id)
 	if err != nil {
 		us.Logger.Error(err.Error(), functionCallerInfo.UserServiceUpdate, err)
 		return nil, err
@@ -130,7 +130,7 @@ func (us *userService) Update(ctx context.Context, id string, req request.Update
 		profile.ImageUri = req.ImageUri
 	}
 
-	_, err = us.UserRepository.Update(context.Background(), *profile)
+	_, err = us.UserRepository.Update(ctx, *profile)
 	if err != nil {
 		us.Logger.Error(err.Error(), functionCallerInfo.UserServiceUpdate, err)
 		return nil, err
