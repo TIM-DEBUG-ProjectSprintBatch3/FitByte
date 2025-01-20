@@ -29,7 +29,6 @@ func (ar *ActivityRepository) GetAll(ctx context.Context, pool *pgxpool.Pool, qu
 			AND ($4::TIMESTAMP IS NULL OR done_at <= $4)
 			AND ($5::NUMERIC IS NULL OR calories_burned >= $5)
 			AND ($6::NUMERIC IS NULL OR calories_burned <= $6)
-		ORDER BY done_at DESC
 		LIMIT $7 OFFSET $8;
 	`
 	rows, err := pool.Query(ctx, query, queryArgs...)
