@@ -11,6 +11,6 @@ type UpdateProfile struct {
 	HeightUnit string  `json:"heightUnit"`
 	Weight     float32 `json:"weight"`
 	Height     float32 `json:"height"`
-	Name       *string `json:"name"`
-	ImageUri   *string `json:"imageUri"`
+	Name       *string `json:"name" validate:"omitempty,min=2,max=60"`
+	ImageUri   string  `json:"imageUri" validate:"omitempty,uri"`
 }

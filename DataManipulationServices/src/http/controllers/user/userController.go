@@ -2,6 +2,7 @@ package userController
 
 import (
 	"net/http"
+	"unicode/utf8"
 
 	"github.com/TimDebug/FitByte/src/exceptions"
 	functionCallerInfo "github.com/TimDebug/FitByte/src/logger/helper"
@@ -81,6 +82,18 @@ func (uc *UserController) Update(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(err.Error())
 		// panic(exceptions.NewBadRequestError(err.Error(), 400))
 	}
+
+	if updateRequest.Name == nil {
+		return c.Status(fiber.StatusBadRequest).JSON("name is nil")
+	}
+	nameLength := utf8.RuneCountInString(*updateRequest.Name)
+	if nameLength < 2 || nameLength > 62 {
+		return fiber.NewError(fiber.StatusBadRequest, "name must be between 2 and 62 characters")
+	}
+	if &updateRequest.ImageUri == nil {
+		return c.Status(fiber.StatusBadRequest).JSON("imageuri is nil")
+	}
+
 	response, err := uc.userService.Update(c, userId, updateRequest)
 	if err != nil {
 		uc.logger.Error(err.Error(), functionCallerInfo.ProfileControllerUpdate, userId, updateRequest)
@@ -88,5 +101,5 @@ func (uc *UserController) Update(c *fiber.Ctx) error {
 	}
 
 	c.Set("X-Author", "TIM-DEBUG")
-	return c.Status(201).JSON(response)
+	return c.Status(fiber.StatusOK).JSON(response)
 }

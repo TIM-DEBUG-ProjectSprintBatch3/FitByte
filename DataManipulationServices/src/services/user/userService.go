@@ -126,8 +126,8 @@ func (us *userService) Update(ctx *fiber.Ctx, id string, req request.UpdateProfi
 	if req.Name != nil {
 		profile.Name = req.Name
 	}
-	if req.ImageUri != nil {
-		profile.ImageUri = req.ImageUri
+	if &req.ImageUri != nil {
+		profile.ImageUri = &req.ImageUri
 	}
 
 	_, err = us.UserRepository.Update(ctx, *profile)

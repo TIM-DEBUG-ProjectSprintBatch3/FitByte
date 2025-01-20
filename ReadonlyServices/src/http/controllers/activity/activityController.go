@@ -2,10 +2,13 @@ package activityController
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 	"time"
 
 	"github.com/TimDebug/FitByte/src/exceptions"
+	functionCallerInfo "github.com/TimDebug/FitByte/src/logger/helper"
+	loggerZap "github.com/TimDebug/FitByte/src/logger/zap"
 	Entity "github.com/TimDebug/FitByte/src/model/entities/activity"
 	activityService "github.com/TimDebug/FitByte/src/services/activity"
 	"github.com/gofiber/fiber/v2"
@@ -14,15 +17,18 @@ import (
 
 type ActivityController struct {
 	activityService activityService.ActivityServiceInterface
+	logger          loggerZap.LoggerInterface
 }
 
-func NewActivityController(activityService activityService.ActivityServiceInterface) ActivityControllerInterface {
-	return &ActivityController{activityService: activityService}
+func NewActivityController(activityService activityService.ActivityServiceInterface, logger loggerZap.LoggerInterface) ActivityControllerInterface {
+	return &ActivityController{activityService: activityService, logger: logger}
+
 }
 
 func NewActivityControllerInject(i do.Injector) (ActivityControllerInterface, error) {
 	_activityService := do.MustInvoke[activityService.ActivityServiceInterface](i)
-	return NewActivityController(_activityService), nil
+	_logger := do.MustInvoke[loggerZap.LoggerInterface](i)
+	return NewActivityController(_activityService, _logger), nil
 }
 
 func (ac *ActivityController) GetAll(c *fiber.Ctx) error {
@@ -42,7 +48,8 @@ func (ac *ActivityController) GetAll(c *fiber.Ctx) error {
 	response, err := ac.activityService.GetAll(context.Background(), buildQueryParams(c, params))
 
 	if err != nil {
-		return err
+		ac.logger.Error(err.Error(), functionCallerInfo.ActivityRepositoryGetAll, params)
+		return c.Status(fiber.StatusBadRequest).JSON(response)
 	}
 
 	c.Set("X-Author", "TIM-DEBUG")
@@ -83,6 +90,9 @@ func getQueryInt(ctx *fiber.Ctx, key string, defaultValue int) int {
 func buildQueryParams(ctx *fiber.Ctx, params map[string]string) []interface{} {
 	limit := getQueryInt(ctx, "limit", 5)
 	offset := getQueryInt(ctx, "offset", 0)
+
+	fmt.Sprintf("limit %d, offset %d", limit, offset)
+
 	activityType := params["activityType"]
 	doneAtFrom := params["doneAtFrom"]
 	doneAtTo := params["doneAtTo"]
