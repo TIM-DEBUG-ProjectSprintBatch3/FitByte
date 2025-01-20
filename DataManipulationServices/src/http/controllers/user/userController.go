@@ -8,6 +8,7 @@ import (
 	loggerZap "github.com/TimDebug/FitByte/src/logger/zap"
 	"github.com/TimDebug/FitByte/src/model/dtos/request"
 	userService "github.com/TimDebug/FitByte/src/services/user"
+	"github.com/TimDebug/FitByte/src/services/user/validator"
 	"github.com/gofiber/fiber/v2"
 	"github.com/samber/do/v2"
 )
@@ -75,12 +76,55 @@ func (uc *UserController) Update(c *fiber.Ctx) error {
 		)
 	}
 
-	updateRequest := request.UpdateProfile{}
+	updateRequestCustom := request.UpdateProfileCustom{}
 
-	if err := c.BodyParser(&updateRequest); err != nil {
+	if err := c.BodyParser(&updateRequestCustom); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(err.Error())
 		// panic(exceptions.NewBadRequestError(err.Error(), 400))
 	}
+
+	if updateRequestCustom.Name.IsPresent {
+		if updateRequestCustom.Name.IsNull || len(updateRequestCustom.Name.Value) < 2 || len(updateRequestCustom.Name.Value) > 60 {
+			return c.Status(fiber.StatusBadRequest).JSON(
+				exceptions.NewUnauthorizedError(
+					"Invalid Name",
+					fiber.StatusBadRequest,
+				),
+			)
+		}
+	}
+
+	if updateRequestCustom.ImageUri.IsPresent {
+		if updateRequestCustom.ImageUri.IsNull || updateRequestCustom.ImageUri.Value == "" {
+			return c.Status(fiber.StatusBadRequest).JSON(
+				exceptions.NewUnauthorizedError(
+					"Invalid Name",
+					fiber.StatusBadRequest,
+				),
+			)
+		}
+	}
+
+	updateRequest := request.UpdateProfile{
+		Preference: updateRequestCustom.Preference,
+		WeightUnit: updateRequestCustom.WeightUnit,
+		HeightUnit: updateRequestCustom.HeightUnit,
+		Weight:     updateRequestCustom.Weight,
+		Height:     updateRequestCustom.Height,
+		Name:       &updateRequestCustom.Name.Value,
+		ImageUri:   &updateRequestCustom.ImageUri.Value,
+	}
+
+	err := validator.ValidateUpdateProfile(updateRequest)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(
+			exceptions.NewUnauthorizedError(
+				"Invalid Name",
+				fiber.StatusBadRequest,
+			),
+		)
+	}
+
 	response, err := uc.userService.Update(c, userId, updateRequest)
 	if err != nil {
 		uc.logger.Error(err.Error(), functionCallerInfo.ProfileControllerUpdate, userId, updateRequest)
@@ -88,5 +132,5 @@ func (uc *UserController) Update(c *fiber.Ctx) error {
 	}
 
 	c.Set("X-Author", "TIM-DEBUG")
-	return c.Status(201).JSON(response)
+	return c.Status(200).JSON(response)
 }

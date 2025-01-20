@@ -12,5 +12,19 @@ type UpdateProfile struct {
 	Weight     float32 `json:"weight"`
 	Height     float32 `json:"height"`
 	Name       *string `json:"name"`
-	ImageUri   *string `json:"imageUri"`
+	ImageUri   *string `json:"imageUri" validate:"uri"`
+}
+
+type ImageUri struct {
+	ImageUri string `json:"imageUri" validate:"uri"`
+}
+
+type UpdateProfileCustom struct {
+	Preference string       `json:"preference"`
+	WeightUnit string       `json:"weightUnit"`
+	HeightUnit string       `json:"heightUnit"`
+	Weight     float32      `json:"weight"`
+	Height     float32      `json:"height"`
+	Name       CustomString `json:"name"`
+	ImageUri   CustomString `json:"imageUri" validate:"uri"`
 }

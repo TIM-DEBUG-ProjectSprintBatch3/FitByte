@@ -1,6 +1,7 @@
 package validator
 
 import (
+	"errors"
 	"net/url"
 
 	"github.com/TimDebug/FitByte/src/model/dtos/request"
@@ -46,4 +47,32 @@ func ValidateAuthParams(input request.UserRegister) error {
 		}
 	}
 	return nil
+}
+
+func ValidateUpdateProfile(input request.UpdateProfile) error {
+	err := validate.Struct(input)
+	if err != nil {
+		validationErrors := err.(validator.ValidationErrors)
+		for _, fieldError := range validationErrors {
+			return fieldError
+		}
+	}
+
+	if *input.ImageUri != "" && !isImageURIExtensionValid(*input.ImageUri) {
+		return errors.New("Invalid imageUri")
+	}
+
+	return nil
+}
+
+func isImageURIExtensionValid(uri string) bool {
+	extension := uri[len(uri)-5:]
+	if extension != ".jpeg" {
+		extension = extension[1:]
+		if extension != ".jpg" && extension != ".png" {
+			return false
+		}
+	}
+
+	return true
 }
