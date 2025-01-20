@@ -91,7 +91,7 @@ func buildQueryParams(ctx *fiber.Ctx, params map[string]string) []interface{} {
 	limit := getQueryInt(ctx, "limit", 5)
 	offset := getQueryInt(ctx, "offset", 0)
 
-	fmt.Sprintf("limit %d, offset %d", limit, offset)
+	fmt.Printf("limit %d, offset %d", limit, offset)
 
 	activityType := params["activityType"]
 	doneAtFrom := params["doneAtFrom"]
