@@ -2,6 +2,7 @@ package userController
 
 import (
 	"net/http"
+	"net/url"
 	"unicode/utf8"
 
 	"github.com/TimDebug/FitByte/src/exceptions"
@@ -90,9 +91,26 @@ func (uc *UserController) Update(c *fiber.Ctx) error {
 	if nameLength < 2 || nameLength > 62 {
 		return fiber.NewError(fiber.StatusBadRequest, "name must be between 2 and 62 characters")
 	}
-	if updateRequest.ImageUri == nil {
-		return c.Status(fiber.StatusBadRequest).JSON("imageuri is nil")
+
+	// Manually Validate URI
+	// Validate ImageUri
+	if updateRequest.ImageUri == nil || *updateRequest.ImageUri == "" {
+		return c.Status(fiber.StatusBadRequest).JSON("imageuri is required and cannot be empty")
 	}
+	// Parse and validate the URI
+	parsedUri, err := url.ParseRequestURI(*updateRequest.ImageUri)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON("imageuri is not a valid URI")
+	}
+	// Optional: Check for schemes like http or https
+	if parsedUri.Scheme != "http" && parsedUri.Scheme != "https" {
+		return c.Status(fiber.StatusBadRequest).JSON("imageuri must have http or https scheme")
+	}
+	// Ensure there's a path (e.g., "/image.jpg")
+	if parsedUri.Path == "" || parsedUri.Path == "/" {
+		return c.Status(fiber.StatusBadRequest).JSON("must have an path and in image format")
+	}
+	//end Validate URI
 
 	response, err := uc.userService.Update(c, userId, updateRequest)
 	if err != nil {
