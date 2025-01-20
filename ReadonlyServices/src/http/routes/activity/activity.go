@@ -1,4 +1,4 @@
-package userroutes
+package activityroutes
 
 import (
 	activityController "github.com/TimDebug/FitByte/src/http/controllers/activity"

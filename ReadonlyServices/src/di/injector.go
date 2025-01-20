@@ -3,8 +3,8 @@ package di
 import (
 	authJwt "github.com/TimDebug/FitByte/src/auth/jwt"
 	"github.com/TimDebug/FitByte/src/database/postgre"
-	"github.com/TimDebug/FitByte/src/http/controllers"
 	activityController "github.com/TimDebug/FitByte/src/http/controllers/activity"
+	userController "github.com/TimDebug/FitByte/src/http/controllers/userProfile"
 	loggerZap "github.com/TimDebug/FitByte/src/logger/zap"
 	"github.com/TimDebug/FitByte/src/repositories"
 	activityRepository "github.com/TimDebug/FitByte/src/repositories/activity"
@@ -43,5 +43,5 @@ func init() {
 	//? Setup Controller/Handler
 	//? Activity Controller
 	do.Provide[activityController.ActivityControllerInterface](Injector, activityController.NewActivityControllerInject)
-	do.Provide[controllers.UserController](Injector, controllers.NewUserControllerInject)
+	do.Provide[userController.UserController](Injector, userController.NewUserControllerInject)
 }
