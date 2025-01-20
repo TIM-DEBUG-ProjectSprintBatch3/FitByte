@@ -2,6 +2,7 @@ package userController
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/TimDebug/FitByte/src/exceptions"
 	"github.com/TimDebug/FitByte/src/model/dtos/request"
@@ -23,17 +24,33 @@ func NewUserControllerInject(i do.Injector) (UserControllerInterface, error) {
 	return NewUserController(_userService), nil
 }
 
+func (uc *UserController) Login(c *fiber.Ctx) error {
+	bodyParsed := request.UserRegister{}
+	if err := c.BodyParser(&bodyParsed); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(exceptions.ErrBadRequest(err.Error()))
+	}
+
+	response, err := uc.userService.Login(context.Background(), bodyParsed)
+	if err != nil {
+		return c.Status(int(err.(exceptions.ErrorResponse).StatusCode)).
+			JSON(err)
+	}
+
+	c.Set("X-Author", "TIM-DEBUG")
+	return c.Status(http.StatusOK).JSON(response)
+}
+
 func (uc *UserController) Register(c *fiber.Ctx) error {
 	userRequestParse := request.UserRegister{}
 
 	if err := c.BodyParser(&userRequestParse); err != nil {
-		panic(exceptions.NewBadRequestError(err.Error(), 400))
+		return c.Status(http.StatusBadRequest).JSON(exceptions.ErrBadRequest(err.Error()))
 	}
 
 	response, err := uc.userService.Register(context.Background(), userRequestParse)
-
 	if err != nil {
-		return err
+		return c.Status(int(err.(exceptions.ErrorResponse).StatusCode)).
+			JSON(err)
 	}
 
 	c.Set("X-Author", "TIM-DEBUG")

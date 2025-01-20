@@ -8,6 +8,7 @@ import (
 )
 
 type UserServiceInterface interface {
+	Login(ctx context.Context, input request.UserRegister) (response.UserRegister, error)
 	Register(ctx context.Context, input request.UserRegister) (response.UserRegister, error)
 	Update(ctx context.Context, id string, input request.UpdateProfile) (*response.UpdateProfile, error)
 }
