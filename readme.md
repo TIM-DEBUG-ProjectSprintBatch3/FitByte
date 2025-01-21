@@ -34,5 +34,11 @@ Selanjutnya buka aplikasi tersebut manual satu-persatu
 4. --belum ada swagger, lewat ke nomor 5--Jika ingin menambahkan swagger, pada rute swagger yang ada di `route.go` buat menjadi seperti ini `swagger/readonly`
 5. Dengan aplikasi seperti Postman, arahkan pada `localhost:8080/[ur_awesome_api_route]`
 
+# Build Docker Image
+1. `docker-compose build`
+2. `docker save -o nama_image.tar nama_image:tag`
+3. `scp nama_image.tar user@server:/path/to/destination`
+4. `sudo docker load -i /path/to/destination/nama_image.tar`
+
 ## Info lebih lanjut
 Sila mengunjungi pada [GogoManager_Project1](https://github.com/prasasdi/projeksprint_p1)
