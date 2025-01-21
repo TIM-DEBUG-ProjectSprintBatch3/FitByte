@@ -40,5 +40,12 @@ Selanjutnya buka aplikasi tersebut manual satu-persatu
 3. `scp nama_image.tar user@server:/path/to/destination`
 4. `sudo docker load -i /path/to/destination/nama_image.tar`
 
+# Common Issues
+Untuk project sprint ini, instance menggunakan arsitektur `arm64`. Sedangkan rata-rata dari kalian --developer-- menggunakan `x86_64` kecuali Mac M serie
+
+Dokumentasi dibawah merupakan common-issue yang biasa ditemui
+## exec /docker-entrypoint.sh: exec format error
+Ini karena image dari dockernya masih mengarah pada `amd64 (x84_64)`, sila perbaiki pada dockerfile menggunakan `arm64` dengan `--platform=linux/arm64`
+
 ## Info lebih lanjut
 Sila mengunjungi pada [GogoManager_Project1](https://github.com/prasasdi/projeksprint_p1)
